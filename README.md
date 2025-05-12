@@ -1,77 +1,68 @@
-# Brain-Tumor-Segmentation
-A deep learning-based web application for brain tumor classification and exploratory data analysis (EDA), built using TensorFlow, Gradio, Streamlit, and Google Colab. The app allows interactive visualization of tumor datasets and real-time prediction of tumor types from uploaded MRI images.
-🔍 Features
-📊 EDA Dashboard using Streamlit (Ngrok-enabled)
+Brain Tumor Segmentation using Computer Vision 🧠🖥️
+This project is a deep learning-based brain tumor classification system using Convolutional Neural Networks (CNNs). It classifies MRI images into four categories: glioma, meningioma, pituitary, and no tumor. A simple Gradio interface is also provided for real-time prediction.
 
-🧠 Tumor Classification using CNNs (Convolutional Neural Networks)
-
-📁 Four Classes: glioma, meningioma, notumor, pituitary
-
-📷 Image upload & classification via Gradio UI
-
-⚙️ Trained in Google Colab, works with Google Drive for data loading
+🔍 Project Overview
+Brain tumor detection is crucial for early diagnosis and treatment. This project implements a computer vision model trained on MRI scans to automate the classification process.
 
 📁 Dataset
-The dataset must follow this folder structure inside your Google Drive:
+Located in Google Drive
+Organized into 4 folders:
+glioma/
+meningioma/
+notumor/
+pituitary/
+Images are resized to 128x128 before training.
+🧠 Model Architecture
+A CNN model built using TensorFlow/Keras with the following layers:
 
-Brain Tumor Segmentation/
-├── glioma/
-├── meningioma/
-├── notumor/
-└── pituitary/
-Each folder contains relevant MRI images for that tumor class.
-
-Example dataset path in the code:
-
-
-/content/drive/MyDrive/Brain Tumor Segmentation
-🛠️ Requirements
-Install all required packages in Colab:
-!pip install streamlit pyngrok gradio
-🚀 How to Run in Google Colab
-Mount your Google Drive:
-from google.colab import drive
-drive.mount('/content/drive')
-Write and launch the Streamlit EDA App:
-%%writefile app.py
-# [Paste your Streamlit EDA code here]
-!streamlit run app.py &
-from pyngrok import ngrok
-ngrok.set_auth_token("your-ngrok-token")
-public_url = ngrok.connect(8501)
-print(f"Streamlit app is live at: {public_url}")
-Build & Train CNN model with Gradio Interface:
-
-All model training and prediction logic is in the main notebook. Gradio will automatically launch a GUI after training:
-interface.launch()
-📊 Streamlit EDA Dashboard
-Displays number of images per class
-
-Resize images for EDA analysis
-
-Easy to modify paths via UI
-
-🧪 CNN Architecture (Keras)
-Conv2D -> MaxPool -> BatchNorm
-Conv2D -> MaxPool -> BatchNorm
-Conv2D -> MaxPool -> BatchNorm
-GlobalAveragePooling -> Dense(128) -> Dropout -> Dense(4)
-Loss Function: categorical_crossentropy
+Conv2D + ReLU → MaxPooling2D → BatchNormalization
+Repeated with increasing filters (32 → 64 → 128)
+GlobalAveragePooling2D
+Dense (128) with ReLU + Dropout
+Output Dense layer with Softmax
+📊 Training Configuration
+Image Size: 128x128
+Batch Size: 16
+Epochs: 10
 Optimizer: Adam
-Metrics: accuracy
-
-📷 Gradio Interface
-After training the CNN, launch the classifier:
-
+Loss Function: Categorical Crossentropy
+Metrics: Accuracy
+Data Split: 80% training, 20% testing
+🚀 How to Run
+Mount Google Drive (dataset stored there)
+Install required libraries
+pip install gradio
+Train the model (runs on Google Colab)
+Launch Gradio app
+interface.launch()
+🖼️ Gradio Interface
 Upload an MRI image
+Get prediction: glioma, meningioma, pituitary, or notumor
+Built with Gradio for easy user interaction
+🧪 Sample Prediction Function
+def predict_image(image):
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    image = cv2.resize(image, (128, 128))
+    image = np.expand_dims(image, axis=0) / 255.0
+    prediction = model.predict(image)
+    label = lb.inverse_transform(prediction)
+    return label[0]
+📌 Requirements
+Python
+TensorFlow / Keras
+OpenCV
+NumPy
+scikit-learn
+Gradio
+Google Colab (recommended)
+📈 Future Improvements
+Use transfer learning (e.g., EfficientNet, ResNet)
+Add segmentation support
+Add Grad-CAM for interpretability
+Improve UI and deploy with Flask or Streamlit
+📜 License
+This project is open-source and available under the MIT License.
 
-Instantly get the predicted tumor type
-
-Works with images of shape (128, 128)
-
-📌 Notes
-Replace "your-ngrok-token" with your actual Ngrok auth token.
-
-Use GPU runtime in Colab for faster training.
-
-Dataset should be pre-downloaded and uploaded to Google Drive.
+🙌 Acknowledgments
+Dataset: [Kaggle / Public MRI Repositories]
+Frameworks: TensorFlow, Gradio, scikit-learn
