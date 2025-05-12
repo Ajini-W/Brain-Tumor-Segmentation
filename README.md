@@ -1,3 +1,4 @@
+# Brain Tumor Segmentation
 Brain Tumor Segmentation using Computer Vision 🧠🖥️
 This project is a deep learning-based brain tumor classification system using Convolutional Neural Networks (CNNs). It classifies MRI images into four categories: glioma, meningioma, pituitary, and no tumor. A simple Gradio interface is also provided for real-time prediction.
 
